@@ -1,71 +1,71 @@
 -- Part 2: Simple Selects and Counts
 -- What are all the types of pokemon that a pokemon can have?
-SELECT name
+SELECT name AS "Possible Types"
 FROM types;
 
 -- What is the name of the pokemon with id 45?
-SELECT name
+SELECT name AS "Pokemon"
 FROM pokemons
 WHERE id = 45;
 
 -- How many pokemon are there?
-SELECT COUNT(id)
+SELECT COUNT(id) as "Number of Pokemon"
 FROM pokemons;
 
 -- How many types are there?
-SELECT COUNT(id)
+SELECT COUNT(id) as "Number of Types"
 FROM types;
 
 -- How many pokemon have a secondary type?
-SELECT COUNT(id)
+SELECT COUNT(id) as "Number of Pokemon with Secondary Types"
 FROM pokemons
 WHERE secondary_type IS NOT NULL;
 
 -- Part 3: Joins and Groups
 -- What is each pokemon's primary type?
-SELECT pokemons.name,
-    types.name
+SELECT pokemons.name AS "Pokemon",
+    types.name AS "Primary Type"
 FROM pokemons
     INNER JOIN types ON pokemons.primary_type = types.id;
 
 -- What is Rufflet's secondary type?
-SELECT types.name AS type
+SELECT types.name AS "Rufflet's secondary type"
 FROM pokemons
     INNER JOIN types ON pokemons.secondary_type = types.id
 WHERE pokemons.name = "Rufflet";
 
 -- What are the names of the pokemon that belong to the trainer with trainer ID
 -- 303?
-SELECT pokemons.name
+SELECT pokemons.name AS "Trainer 303 Pokemon names"
 FROM pokemon_trainer
     INNER JOIN pokemons ON pokemon_trainer.pokemon_id = pokemons.id
 WHERE trainerID = 303;
 
 -- How many pokemon have a secondary type Poison?
-SELECT COUNT(pokemons.id) AS count
+SELECT COUNT(pokemons.id) AS "Number of Pokemon with secondary type Poison"
 FROM pokemons
     INNER JOIN types ON pokemons.secondary_type = types.id
 WHERE types.name = "Poison";
 
 -- What are all the primary types and how many pokemon have that type?
-SELECT COUNT(pokemons.id) AS count,
-    types.name
+SELECT types.name AS "Primary Type",
+    COUNT(pokemons.id) AS "Number of Pokemon"
 FROM pokemons
     INNER JOIN types ON pokemons.primary_type = types.id
 GROUP BY types.name;
 
 -- How many pokemon at level 100 does each trainer with at least one level 100
 -- pokemon have? (Hint: your query should not display a trainer)
-SELECT COUNT(pokemon_trainer.pokelevel) AS numPokemonAtLevel100
+SELECT COUNT(pokemon_trainer.pokelevel) AS "Number of Level 100 Pokemon"
 FROM pokemon_trainer
     INNER JOIN pokemons ON pokemon_trainer.pokemon_id = pokemons.id
     INNER JOIN trainers ON pokemon_trainer.trainerID = trainers.trainerID
 WHERE pokelevel = 100
 GROUP BY trainers.trainerID
-ORDER BY numPokemonAtLevel100 DESC;
+ORDER BY "Number of Level 100 Pokemon" DESC;
 
 -- How many pokemon only belong to one trainer and no other?
-SELECT COUNT(count) AS numPokemonBelongingToOneTrainer
+SELECT COUNT(count) AS "Number of Pokemon belonging to one trainer"
 FROM (
         SELECT COUNT(trainerID) as count
         FROM pokemon_trainer
